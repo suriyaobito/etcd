@@ -23,7 +23,9 @@ import (
 )
 
 func Main(args []string) {
-	fmt.Println("Inside main branch")
+	fmt.Println("args coming into Main function args = []string", args)
+	fmt.Println("Inside main branch - etcdmain/main.go")
+	fmt.Println("check support arch function is called")
 	checkSupportArch()
 
 	if len(args) > 1 {

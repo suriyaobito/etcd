@@ -464,6 +464,8 @@ func identifyDataDirOrDie(lg *zap.Logger, dir string) dirType {
 }
 
 func checkSupportArch() {
+	fmt.Println("Inside checkSupportArch()")
+	fmt.Println("Creating logger using logutil.CreateDefaultZapLogger")
 	lg, err := logutil.CreateDefaultZapLogger(zap.InfoLevel)
 	if err != nil {
 		panic(err)
