@@ -28,7 +28,42 @@ func CreateDefaultZapLogger(level zapcore.Level) (*zap.Logger, error) {
 	fmt.Println("Inside CreateDefaultZapLogger")
 	fmt.Println("Args coming in CreateDefaultZapLogger args = ", level)
 	lcfg := DefaultZapLoggerConfig
-	fmt.Println("Zap logger config is assinged to lcfg = ", lcfg)
+	fmt.Printf(`lcfg = // DefaultZapLoggerConfig defines default zap logger configuration.
+	var DefaultZapLoggerConfig = zap.Config{
+		Level: zap.NewAtomicLevelAt(ConvertToZapLevel(DefaultLogLevel)),
+	
+		Development: false,
+		Sampling: &zap.SamplingConfig{
+			Initial:    100,
+			Thereafter: 100,
+		},
+	
+		Encoding: "json",
+	
+		// copied from "zap.NewProductionEncoderConfig" with some updates
+		EncoderConfig: zapcore.EncoderConfig{
+			TimeKey:       "ts",
+			LevelKey:      "level",
+			NameKey:       "logger",
+			CallerKey:     "caller",
+			MessageKey:    "msg",
+			StacktraceKey: "stacktrace",
+			LineEnding:    zapcore.DefaultLineEnding,
+			EncodeLevel:   zapcore.LowercaseLevelEncoder,
+	
+			// Custom EncodeTime function to ensure we match format and precision of historic capnslog timestamps
+			EncodeTime: func(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
+				enc.AppendString(t.Format("2006-01-02T15:04:05.000000Z0700"))
+			},
+	
+			EncodeDuration: zapcore.StringDurationEncoder,
+			EncodeCaller:   zapcore.ShortCallerEncoder,
+		},
+	
+		// Use "/dev/null" to discard all
+		OutputPaths:      []string{"stderr"},
+		ErrorOutputPaths: []string{"stderr"},
+	}`)
 	lcfg.Level = zap.NewAtomicLevelAt(level)
 	c, err := lcfg.Build()
 	if err != nil {
