@@ -23,6 +23,7 @@ import (
 )
 
 func Main(args []string) {
+	fmt.Println("Inside main branch")
 	checkSupportArch()
 
 	if len(args) > 1 {
