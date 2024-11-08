@@ -15,6 +15,7 @@
 package logutil
 
 import (
+	"fmt"
 	"sort"
 	"time"
 
@@ -24,7 +25,10 @@ import (
 
 // CreateDefaultZapLogger creates a logger with default zap configuration
 func CreateDefaultZapLogger(level zapcore.Level) (*zap.Logger, error) {
+	fmt.Println("Inside CreateDefaultZapLogger")
+	fmt.Println("Args coming in CreateDefaultZapLogger args = ", level)
 	lcfg := DefaultZapLoggerConfig
+	fmt.Println("Zap logger config is assinged to lcfg = ", lcfg)
 	lcfg.Level = zap.NewAtomicLevelAt(level)
 	c, err := lcfg.Build()
 	if err != nil {
